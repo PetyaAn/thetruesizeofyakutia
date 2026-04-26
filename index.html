@@ -254,24 +254,12 @@
       worldCopyJump: true
     });
 
-    const primaryTiles = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
-      maxZoom: 10,
-      attribution: '&copy; OpenStreetMap'
-    });
-
-    const fallbackTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    // Бесплатная светлая карта без API-ключа.
+    // Stadia Maps убран, потому что он требует авторизацию и показывает 401 Error.
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       maxZoom: 10,
       attribution: '&copy; OpenStreetMap & Carto'
-    });
-
-    primaryTiles.on('tileerror', () => {
-      if (!map.hasLayer(fallbackTiles)) {
-        map.removeLayer(primaryTiles);
-        fallbackTiles.addTo(map);
-      }
-    });
-
-    primaryTiles.addTo(map);
+    }).addTo(map);
 
     let originalGeoJson = null;
     let currentGeoJson = null;
