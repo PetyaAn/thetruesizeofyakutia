@@ -18,7 +18,7 @@
     button:hover { background:#333; }
     .leaflet-interactive { cursor:grab; touch-action:none; }
     .leaflet-interactive:active { cursor:grabbing; }
-    .compass { position:absolute; z-index:1000; left:22px; bottom:22px; width:116px; height:116px; border-radius:50%; background:rgba(255,255,255,.78); backdrop-filter:blur(8px); box-shadow:0 10px 28px rgba(0,0,0,.26); display:flex; align-items:center; justify-content:center; user-select:none; -webkit-user-select:none; touch-action:none; cursor:grab; }
+    .compass { position: absolute; z-index: 1000; right: 20px; bottom: 140px; /* поднимаем над панелью */ width: 116px; height: 116px; border-radius: 50%; background: rgba(255, 255, 255, 0.78); backdrop-filter: blur(8px); box-shadow: 0 10px 28px rgba(0,0,0,0.26);  display: flex; align-items: center; justify-content: center; user-select: none; touch-action: none; }
     .compass:active { cursor:grabbing; }
     .compass-ring { width:96px; height:96px; border-radius:50%; border:2px solid rgba(20,40,60,.25); position:relative; background:radial-gradient(circle, rgba(255,255,255,.96) 0%, rgba(231,244,249,.82) 60%, rgba(185,216,226,.72) 100%); }
     .compass-needle { position:absolute; left:50%; top:50%; width:8px; height:78px; transform-origin:50% 50%; transform:translate(-50%,-50%) rotate(0deg); pointer-events:none; }
