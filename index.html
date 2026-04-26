@@ -6,10 +6,7 @@
 
   <title>True Size of Yakutia</title>
 
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <style>
     html, body {
@@ -17,39 +14,32 @@
       height: 100%;
       font-family: Arial, sans-serif;
       overflow: hidden;
+      background: #a9c8d3;
     }
 
     #map {
       width: 100%;
       height: 100vh;
+      background: #a9c8d3;
     }
 
     .panel {
-      <div class="rotate-control">
-        <button onclick="rotateYakutia(-10)">⟲</button>
-        <button onclick="rotateYakutia(10)">⟳</button>
-      </div>
-      .rotate-control {
-        margin-top: 10px;
-      }
-      .rotate-control button {
-        margin-right: 6px;
-      }
       position: absolute;
       z-index: 1000;
-      bottom: 16px;
-      right: 16px;
-      width: 320px;
-      background: rgba(255, 255, 255, 0.85);
+      right: 18px;
+      bottom: 18px;
+      width: 330px;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(10px);
       padding: 16px;
       border-radius: 18px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.25);
-      backdrop-filter: blur(8px);      
+      box-shadow: 0 12px 35px rgba(0,0,0,0.25);
     }
 
     h1 {
       margin: 0 0 8px;
       font-size: 22px;
+      line-height: 1.15;
     }
 
     p {
@@ -61,14 +51,21 @@
 
     .stat {
       font-size: 14px;
-      font-weight: bold;
+      font-weight: 700;
       margin-bottom: 12px;
     }
 
     .hint {
       font-size: 13px;
-      color: #777;
+      color: #666;
       line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .panel-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     button {
@@ -78,11 +75,11 @@
       padding: 9px 12px;
       border-radius: 10px;
       cursor: pointer;
-      margin-top: 12px;
+      font-weight: 700;
     }
 
     button:hover {
-      background: #444;
+      background: #333;
     }
 
     .leaflet-interactive {
@@ -92,29 +89,160 @@
     .leaflet-interactive:active {
       cursor: grabbing;
     }
+
+    .compass {
+      position: absolute;
+      z-index: 1000;
+      left: 22px;
+      bottom: 22px;
+      width: 116px;
+      height: 116px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.26);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .compass-ring {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      border: 2px solid rgba(20, 40, 60, 0.25);
+      position: relative;
+      background: radial-gradient(circle, rgba(255,255,255,0.96) 0%, rgba(231,244,249,0.82) 60%, rgba(185,216,226,0.72) 100%);
+    }
+
+    .compass-needle {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 8px;
+      height: 78px;
+      transform-origin: 50% 50%;
+      transform: translate(-50%, -50%) rotate(0deg);
+      pointer-events: none;
+    }
+
+    .compass-needle::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 11px solid transparent;
+      border-right: 11px solid transparent;
+      border-bottom: 44px solid #f1d64a;
+      filter: drop-shadow(0 1px 1px rgba(0,0,0,0.35));
+    }
+
+    .compass-needle::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent;
+      border-top: 34px solid #5d7682;
+      opacity: 0.75;
+    }
+
+    .compass-center {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #111;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.75);
+      pointer-events: none;
+    }
+
+    .compass-label {
+      position: absolute;
+      top: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      font-weight: 700;
+      color: #111;
+      pointer-events: none;
+    }
+
+    @media (max-width: 640px) {
+      .panel {
+        width: calc(100vw - 68px);
+        right: 12px;
+        bottom: 12px;
+        padding: 14px;
+      }
+
+      .compass {
+        width: 92px;
+        height: 92px;
+        left: 14px;
+        bottom: 170px;
+      }
+
+      .compass-ring {
+        width: 76px;
+        height: 76px;
+      }
+
+      .compass-needle {
+        height: 62px;
+      }
+
+      h1 {
+        font-size: 19px;
+      }
+    }
   </style>
 </head>
 
 <body>
+  <div id="map"></div>
+
   <div class="panel">
     <h1>True Size of Yakutia</h1>
 
     <p>
-      Drag the outline of Yakutia around the world and compare its actual size with other territories
+      Перетаскивай контур Якутии по миру и сравнивай её реальный размер с другими территориями
     </p>
 
     <div class="stat">
-      Area of ​​Yakutia: ≈ 3.08 million km²
+      Площадь Якутии: ≈ 3,08 млн км²
     </div>
 
     <div class="hint">
-      Grab the red outline with your mouse or finger and move it around the map
+      Хватай красный контур мышкой или пальцем. Компасом внизу слева можно вращать Якутию
     </div>
 
-    <button onclick="resetYakutia()">Reset Yakutia</button>
+    <div class="panel-actions">
+      <button onclick="resetYakutia()">Reset Yakutia</button>
+      <button onclick="rotateYakutiaBy(-15)">⟲ 15°</button>
+      <button onclick="rotateYakutiaBy(15)">⟳ 15°</button>
+    </div>
   </div>
 
-  <div id="map"></div>
+  <div class="compass" id="compass" title="Вращать Якутию">
+    <div class="compass-ring">
+      <div class="compass-label">N</div>
+      <div class="compass-needle" id="compassNeedle"></div>
+      <div class="compass-center"></div>
+    </div>
+  </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
@@ -126,10 +254,24 @@
       worldCopyJump: true
     });
 
-    L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
+    const primaryTiles = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
       maxZoom: 10,
-      attribution: '© OpenStreetMap'
-    }).addTo(map);
+      attribution: '&copy; OpenStreetMap'
+    });
+
+    const fallbackTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 10,
+      attribution: '&copy; OpenStreetMap & Carto'
+    });
+
+    primaryTiles.on('tileerror', () => {
+      if (!map.hasLayer(fallbackTiles)) {
+        map.removeLayer(primaryTiles);
+        fallbackTiles.addTo(map);
+      }
+    });
+
+    primaryTiles.addTo(map);
 
     let originalGeoJson = null;
     let currentGeoJson = null;
@@ -138,24 +280,42 @@
     let originalCenter = null;
     let currentCenter = null;
 
-    let isDragging = false;
+    let currentRotation = 0;
+    let isDraggingYakutia = false;
+    let isRotatingCompass = false;
+
+    const compass = document.getElementById('compass');
+    const compassNeedle = document.getElementById('compassNeedle');
 
     fetch('yakutia.geojson')
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Не найден файл yakutia.geojson');
+        }
+        return response.json();
+      })
       .then(data => {
         originalGeoJson = data;
-
         originalCenter = turf.center(data).geometry.coordinates;
         currentCenter = originalCenter;
 
-        currentGeoJson = JSON.parse(JSON.stringify(originalGeoJson));
-
-        drawYakutia(currentGeoJson);
-
-        map.fitBounds(yakutiaLayer.getBounds(), {
-          padding: [40, 40]
-        });
+        redrawYakutia();
+        map.fitBounds(yakutiaLayer.getBounds(), { padding: [40, 40] });
+      })
+      .catch(error => {
+        console.error(error);
+        alert('Не удалось загрузить yakutia.geojson. Проверь название файла и валидность JSON.');
       });
+
+    function redrawYakutia() {
+      if (!originalGeoJson || !currentCenter) return;
+
+      const moved = moveGeoJsonToCenter(originalGeoJson, originalCenter, currentCenter);
+      currentGeoJson = rotateGeoJson(moved, currentCenter, currentRotation);
+
+      drawYakutia(currentGeoJson);
+      updateCompass();
+    }
 
     function drawYakutia(geojson) {
       if (yakutiaLayer) {
@@ -172,13 +332,13 @@
       }).addTo(map);
 
       yakutiaLayer.eachLayer(layer => {
-        layer.on('mousedown', startDragging);
-        layer.on('touchstart', startDragging);
+        layer.on('mousedown', startYakutiaDrag);
+        layer.on('touchstart', startYakutiaDrag);
       });
     }
 
-    function startDragging(event) {
-      isDragging = true;
+    function startYakutiaDrag(event) {
+      isDraggingYakutia = true;
       map.dragging.disable();
 
       if (event.originalEvent) {
@@ -187,57 +347,108 @@
     }
 
     map.on('mousemove', event => {
-      if (!isDragging) return;
-
+      if (!isDraggingYakutia) return;
       moveYakutiaTo(event.latlng.lat, event.latlng.lng);
     });
 
-    map.on('mouseup', () => {
-      stopDragging();
-    });
+    map.on('mouseup', stopYakutiaDrag);
 
     map.on('touchmove', event => {
-      if (!isDragging) return;
+      if (!isDraggingYakutia) return;
 
       const touch = event.originalEvent.touches[0];
       const latlng = map.mouseEventToLatLng(touch);
-
       moveYakutiaTo(latlng.lat, latlng.lng);
     });
 
-    map.on('touchend', () => {
-      stopDragging();
-    });
+    map.on('touchend', stopYakutiaDrag);
 
-    function stopDragging() {
-      if (!isDragging) return;
-
-      isDragging = false;
+    function stopYakutiaDrag() {
+      if (!isDraggingYakutia) return;
+      isDraggingYakutia = false;
       map.dragging.enable();
     }
 
     function moveYakutiaTo(lat, lng) {
       currentCenter = [lng, lat];
-
-      currentGeoJson = moveGeoJsonToCenter(
-        originalGeoJson,
-        originalCenter,
-        currentCenter
-      );
-
-      drawYakutia(currentGeoJson);
+      redrawYakutia();
     }
 
     function resetYakutia() {
       currentCenter = originalCenter;
-      currentGeoJson = JSON.parse(JSON.stringify(originalGeoJson));
+      currentRotation = 0;
+      redrawYakutia();
 
-      drawYakutia(currentGeoJson);
-
-      map.fitBounds(yakutiaLayer.getBounds(), {
-        padding: [40, 40]
-      });
+      if (yakutiaLayer) {
+        map.fitBounds(yakutiaLayer.getBounds(), { padding: [40, 40] });
+      }
     }
+
+    function rotateYakutiaBy(angle) {
+      currentRotation += angle;
+      redrawYakutia();
+    }
+
+    function setYakutiaRotation(angle) {
+      currentRotation = angle;
+      redrawYakutia();
+    }
+
+    function updateCompass() {
+      compassNeedle.style.transform = `translate(-50%, -50%) rotate(${currentRotation}deg)`;
+    }
+
+    function getCompassAngle(clientX, clientY) {
+      const rect = compass.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+
+      const dx = clientX - cx;
+      const dy = clientY - cy;
+
+      return Math.atan2(dx, -dy) * 180 / Math.PI;
+    }
+
+    compass.addEventListener('mousedown', event => {
+      isRotatingCompass = true;
+      map.dragging.disable();
+      setYakutiaRotation(getCompassAngle(event.clientX, event.clientY));
+      event.preventDefault();
+    });
+
+    window.addEventListener('mousemove', event => {
+      if (!isRotatingCompass) return;
+      setYakutiaRotation(getCompassAngle(event.clientX, event.clientY));
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!isRotatingCompass) return;
+      isRotatingCompass = false;
+      map.dragging.enable();
+    });
+
+    compass.addEventListener('touchstart', event => {
+      isRotatingCompass = true;
+      map.dragging.disable();
+
+      const touch = event.touches[0];
+      setYakutiaRotation(getCompassAngle(touch.clientX, touch.clientY));
+      event.preventDefault();
+    });
+
+    window.addEventListener('touchmove', event => {
+      if (!isRotatingCompass) return;
+
+      const touch = event.touches[0];
+      setYakutiaRotation(getCompassAngle(touch.clientX, touch.clientY));
+      event.preventDefault();
+    }, { passive: false });
+
+    window.addEventListener('touchend', () => {
+      if (!isRotatingCompass) return;
+      isRotatingCompass = false;
+      map.dragging.enable();
+    });
 
     function moveGeoJsonToCenter(geojson, fromCenter, toCenter) {
       const cloned = JSON.parse(JSON.stringify(geojson));
@@ -273,10 +484,48 @@
       }
 
       cloned.features = cloned.features.map(feature => {
-        feature.geometry.coordinates = processCoordinates(
-          feature.geometry.coordinates
+        feature.geometry.coordinates = processCoordinates(feature.geometry.coordinates);
+        return feature;
+      });
+
+      return cloned;
+    }
+
+    function rotateGeoJson(geojson, center, angle) {
+      const cloned = JSON.parse(JSON.stringify(geojson));
+
+      function rotateCoord(coord) {
+        const distance = turf.distance(
+          turf.point(center),
+          turf.point(coord),
+          { units: 'kilometers' }
         );
 
+        const bearing = turf.bearing(
+          turf.point(center),
+          turf.point(coord)
+        );
+
+        const rotated = turf.destination(
+          turf.point(center),
+          distance,
+          bearing + angle,
+          { units: 'kilometers' }
+        );
+
+        return rotated.geometry.coordinates;
+      }
+
+      function processCoordinates(coords) {
+        if (typeof coords[0] === 'number') {
+          return rotateCoord(coords);
+        }
+
+        return coords.map(processCoordinates);
+      }
+
+      cloned.features = cloned.features.map(feature => {
+        feature.geometry.coordinates = processCoordinates(feature.geometry.coordinates);
         return feature;
       });
 
