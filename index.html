@@ -61,7 +61,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
   <script>
     const map = L.map('map', { center:[64,125], zoom:3, worldCopyJump:true, tap:false, zoomControl:true });
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom:10, attribution:'&copy; OpenStreetMap & Carto' }).addTo(map);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', { maxZoom: 10,attribution: '&copy; OpenStreetMap & Carto' }).addTo(map);
 
     let originalGeoJson=null, currentGeoJson=null, yakutiaLayer=null;
     let originalCenter=null, currentCenter=null;
