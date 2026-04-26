@@ -25,6 +25,16 @@
     }
 
     .panel {
+      <div class="rotate-control">
+        <button onclick="rotateYakutia(-10)">⟲</button>
+        <button onclick="rotateYakutia(10)">⟳</button>
+      </div>
+      .rotate-control {
+        margin-top: 10px;
+      }
+      .rotate-control button {
+        margin-right: 6px;
+      }
       position: absolute;
       z-index: 1000;
       bottom: 16px;
